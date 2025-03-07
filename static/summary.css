@@ -1,0 +1,55 @@
+
+.container{
+    margin-top: 50px;
+}
+
+.container blockquote p{
+    font-size: 30px;
+}
+
+body .inputOutputField{
+    display: flex;
+    justify-content: space-around;
+}
+
+.original_title{
+    background-color: antiquewhite;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    margin-left: 16.5%;
+}
+
+.summary_title{
+    background-color: bisque;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    margin-left: 2%;
+}
+
+.box{
+    display: flex;
+    flex-direction: row;
+}
+
+.originalText{
+    background-color: blanchedalmond;
+    padding: 20px;
+    margin-left: 20px;
+}
+
+.summaryText{
+    background-color: bisque;
+    padding: 20px;
+    /* margin-left: px; */
+}
+
+.box2{
+    padding: 20px;
+    margin-left: 10px;
+}

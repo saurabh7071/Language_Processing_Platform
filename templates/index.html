@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="navbar">
+        {% include 'navbar.html' %}
+    </div>
+
+    <div class="container">
+        <div class="text-center">
+            <h1 class="mb-4">Text Summarization</h1>
+            <p class="lead">Retrieve the best summary for the text</p>
+        </div>
+
+        <form action="/" method="POST">
+            <textarea name="rawtext" class="form-control mb-3" rows="7" placeholder="Enter your raw text..."></textarea>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h2 class="original_title">Original Text</h2>
+                <p class="originalText">{{ original_text }}</p>
+                <button class="btn btn-danger" type="button">Original Word Count: {{ len_orig_text }}</button>
+            </div>
+            <div class="col-md-6">
+                <h2 class="summary_title">Summary Text</h2>
+                <p class="summaryText">{{ summary }}</p>
+
+                <button class="btn btn-primary" onclick="copySummaryText()" style="margin-left: 10px" id="copyButton">📋</button>
+
+            <a class="btn btn-success" onclick="downloadSummary()" download="summary.pdf" style="margin-left: 10px">⬇️</a>
+
+            <button class="btn btn-success" type="submit" value="Submit" style="margin-left: 10px">Summary Word Count :
+                {{len_summary}} </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        function copySummaryText() {
+            var summaryText = document.getElementsByClassName("summaryText")[0];
+            var range = document.createRange();
+            range.selectNode(summaryText);
+            window.getSelection().removeAllRanges(); // Clear previous selections
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // Clear the selection after copying
+
+            var copyButton = document.getElementById("copyButton");
+            copyButton.textContent = "Copied!";
+            setTimeout(function () {
+                copyButton.textContent = "📋";
+            }, 2000);
+        }
+
+        const { jsPDF } = window.jspdf;
+        
+        function downloadSummary() {
+            var summaryText = document.getElementsByClassName("summaryText")[0].textContent;
+            var pdf = new jsPDF({
+                orientation: 'p',
+                unit: 'mm',
+                format: 'a4'
+            });
+            pdf.setFont('times', 'italic');
+            pdf.setFontSize(15);
+        
+            var textLines = pdf.splitTextToSize(summaryText, 180);
+            var lineHeight = 10; // Line height for spacing
+            var margin = 25; // Margin from left and right
+            var paddingTop = 20; // Padding from the top
+            var maxWidth = 180; // Maximum width of text
+        
+            for (var i = 0; i < textLines.length; i++) {
+                var y = paddingTop + lineHeight * i;
+                var text = textLines[i];
+                var textWidth = pdf.getStringUnitWidth(text) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
+                var x = (pdf.internal.pageSize.width - textWidth) / 2; // Center align text
+                pdf.text(text, x, y, { align: "justify", maxWidth: maxWidth });
+            }
+            pdf.save("summary.pdf");
+        }
+        
+        
+       
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

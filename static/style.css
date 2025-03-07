@@ -1,0 +1,92 @@
+/*
+.container blockquote p{
+    font-size: 30px;
+}
+
+body .inputOutputField{
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+
+.original_title,
+.summary_title {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    text-align: center;
+    width: 40%; 
+}
+
+.box{
+    display: flex;
+    flex-direction: row;
+}
+
+.originalText,
+.summaryText {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-wrap: break-word; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.box2{
+    padding: 20px;
+    margin-left: 10px;
+}
+
+.words {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.btn {
+    margin-top: 10px;
+}
+
+*/
+
+.container h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.container .lead {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+
+.container form textarea {
+    resize: none;
+}
+
+.container .original_title,
+.container .summary_title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.container .originalText,
+.container .summaryText {
+    font-size: 16px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container .words .btn {
+    margin-top: 20px;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .container .originalText,
+    .container .summaryText {
+        margin-top: 20px;
+    }
+}

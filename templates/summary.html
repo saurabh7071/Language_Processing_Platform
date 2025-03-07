@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/summary.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <figure class="text-center">
+            <blockquote class="blockquote">
+                <p>Text Summarization</p>
+            </blockquote>
+            <figcaption class="blockquote-footer">
+                Retrive the best summary for the text
+            </figcaption>
+        </figure>
+    </div>
+
+    <div class="inputOuputField" style="display:flex">
+        <p class="original_title col-sm-4">Original Text</p>
+        <p class="summary_title col-sm-4">Summary Text</p>
+    </div>
+
+    <div class="box">
+        <p class="originalText col-sm-6">{{original_text}}</p>
+        <div class="box2">
+            <p id="dynamicSummary" class="summaryText col-sm-6">{{summary}}</p>
+
+            <!-- <form id="adjustSummaryForm" onsubmit="adjustSummary(event)">
+                <label for="summaryLength">Desired Summary Length:</label>
+                <input type="number" id="summaryLength" name="summaryLength" value="{{len_summary}}" min="1" max="500">
+                <button type="submit" class="btn btn-primary">Adjust</button>
+            </form> -->
+
+            <button class="btn btn-primary" onclick="copySummaryText()" style="margin-left: 10px" id="copyButton">📋</button>
+
+            <a class="btn btn-success" onclick="downloadSummary()" download="summary.pdf" style="margin-left: 10px">⬇️</a>
+
+            <button class="btn btn-success" type="submit" value="Submit" style="margin-left: 10px">Words :
+                {{len_summary}} </button>
+        </div>
+    </div>
+
+    <div class="words">
+        <button class="btn btn-danger" type="submit" value="Submit" style="margin-left: 20px">Words :
+            {{len_orig_text}}</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        function copySummaryText() {
+            var summaryText = document.getElementsByClassName("summaryText")[0];
+            var range = document.createRange();
+            range.selectNode(summaryText);
+            window.getSelection().removeAllRanges(); // Clear previous selections
+            window.getSelection().addRange(range);
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges(); // Clear the selection after copying
+
+            var copyButton = document.getElementById("copyButton");
+            copyButton.textContent = "Copied!";
+            setTimeout(function () {
+                copyButton.textContent = "📋";
+            }, 2000);
+        }
+    </script>
+
+    <script>
+
+        const { jsPDF } = window.jspdf;
+
+        function downloadSummary() {
+            // Get the summary text
+            var summaryText = document.getElementsByClassName("summaryText")[0].textContent;
+            // Create a new jsPDF instance
+            var pdf = new jsPDF();
+            // Add the summary text to the PDF
+            pdf.setFontSize(12);
+            var textLines = pdf.splitTextToSize(summaryText, 180);
+            // Add each line of text to the PDF
+            for (var i = 0; i < textLines.length; i++) {
+                pdf.text(textLines[i], 10, 10 + (i * 10)); // Adjust the y-coordinate for each line
+            }
+            // Save the PDF with a filename
+            pdf.save("summary.pdf");
+        }
+    </script>
+
+    <script>
+        function adjustSummaryLength(summaryText, desiredLength) {
+            // Split the summary text into individual words or tokens
+            var sentences = summaryText.split('#').filter(Boolean);
+    
+            // Adjust the sentence count to match the desired length
+            if (sentences.length > desiredLength) {
+                // Truncate the sentence list if it's longer than the desired length
+                sentences = sentences.slice(0, desiredLength);
+            } else if (sentences.length < desiredLength) {
+                // Pad the sentence list if it's shorter than the desired length
+                var padding = new Array(desiredLength - sentences.length).fill("...");
+                sentences = sentences.concat(padding);
+            }
+    
+            // Reconstruct the summary text from the adjusted sentences
+            var adjustedSummary = sentences.join('#');
+    
+            return adjustedSummary;
+        }
+    
+        function adjustSummary(event) {
+            event.preventDefault();
+            
+            // Get the desired summary length from the form input
+            var desiredLength = document.getElementById("summaryLength").value;
+    
+            // Get the current summary text
+            var summaryText = document.getElementById("dynamicSummary").textContent;
+    
+            // Update the summary text dynamically
+            document.getElementById("dynamicSummary").textContent = adjustSummaryLength(summaryText, desiredLength);
+        }
+    </script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
